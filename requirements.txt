@@ -6,4 +6,6 @@ webdriver-manager==4.0.1
 
 # Additional utilities
 requests==2.32.3
+# Add these to requirements.txt
+gunicorn==22.0.0
 lxml==5.2.1
