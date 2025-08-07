@@ -49,17 +49,31 @@ def get_live_match_data(match_id, slug):
 
     try:
         second_batting_team_score = (
-            soup.find('div', class_="cb-col cb-col-100 cb-min-tm") or
-            soup.find_all('span', class_="cb-font-20 text-bold")[1]
+                soup.find('div', class_="cb-col cb-col-100 cb-min-tm") or
+                soup.find_all('span', class_="cb-font-20 text-bold")[1]
         ).text.strip()
     except:
-        second_batting_team_score = 'Yet to bat'
+        try:
+            second_batting_team_score = soup.find_all('div', class_="cb-min-bat-rw")[0].text #.split("REQ")[0].split('CRR:')[0]
+            try:
+                if 'REQ' in second_batting_team_score:
+                    second_batting_team_score = second_batting_team_score.split("REQ")[0].split('CRR:')[0]
+                else:
+                    second_batting_team_score = 'Yet to bat'
+            except:
+                second_batting_team_score=second_batting_team_score
+        except:
+            second_batting_team_score = 'Yet to bat'
 
     # IMPROVED MATCH STATUS (From Code 2)
     try:
         match_status = soup.find('div', class_="cb-col cb-col-100 cb-min-stts cb-text-complete").text.strip()
     except:
         match_status = "Match in progress"
+    try:
+        how_many_ball_to_win=soup.find('div', class_="cb-text-inprogress").text.strip()
+    except:
+        how_many_ball_to_win=''
 
     # Existing CRR/RRR extraction
     crr_label = soup.find('span', string=lambda x: x and 'CRR' in x)
@@ -125,6 +139,7 @@ def get_live_match_data(match_id, slug):
         'first_batting_score': first_batting_team_score,
         'second_batting_score': second_batting_team_score,
         'match_status': match_status,  # New field
+        'how_many_ball_to_win': how_many_ball_to_win, # New field
         'crr': crr_value,
         'rrr': rrr_value,
         'batters': batters,
@@ -250,3 +265,4 @@ def cricbuzz_api():
 if __name__ == '__main__':
 
     app.run(debug=True)
+
