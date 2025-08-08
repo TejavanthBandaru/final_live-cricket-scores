@@ -48,36 +48,26 @@ def get_live_match_data(match_id, slug):
         first_batting_team_score = 'Yet to bat'
 
     try:
-
         second_batting_team_score = (
-
                 soup.find('div', class_="cb-col cb-col-100 cb-min-tm") or
-
                 soup.find_all('span', class_="cb-font-20 text-bold")[1]
-
         ).text.strip()
-
     except:
         try:
-
+            # second_batting_team_score = soup.find('span', class_="cb-font-20 text-bold").text.strip()
             second_batting_team_score = soup.find_all('div', class_="cb-min-bat-rw")[0].text
-
-            try:
-
-                if 'CRR' in second_batting_team_score and 'test' in url:
-
-                    second_batting_team_score = soup.find('span', class_="cb-font-20 text-bold").text.strip()
-
-                else:
-
-                    second_batting_team_score = 'yet to bat'
-
-            except:
-
-                second_batting_team_score = 'Yet to bat'
-
+            if 'CRR' in second_batting_team_score and 'REQ' in second_batting_team_score :
+                second_batting_team_score = second_batting_team_score
+                # print('jjjjjjjjjjjjjjjj',second_batting_team_score)
+            else:
+                try:
+                    if 'CRR' in second_batting_team_score and 'test' in url:
+                        second_batting_team_score = soup.find('span', class_="cb-font-20 text-bold").text.strip()
+                    else:
+                        second_batting_team_score = 'yet to bat'
+                except:
+                    second_batting_team_score = 'Yet to bat'
         except:
-
             second_batting_team_score = 'yet to bat'
  
 
@@ -281,5 +271,6 @@ def cricbuzz_api():
 if __name__ == '__main__':
 
     app.run(debug=True)
+
 
 
