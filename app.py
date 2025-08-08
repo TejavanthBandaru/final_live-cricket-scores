@@ -48,26 +48,42 @@ def get_live_match_data(match_id, slug):
         first_batting_team_score = 'Yet to bat'
 
     try:
+
         second_batting_team_score = (
+
                 soup.find('div', class_="cb-col cb-col-100 cb-min-tm") or
+
                 soup.find_all('span', class_="cb-font-20 text-bold")[1]
+
         ).text.strip()
+
     except:
         try:
-            second_batting_team_score = soup.find_all('div', class_="cb-min-bat-rw")[0].text #.split("REQ")[0].split('CRR:')[0]
+
+            second_batting_team_score = soup.find_all('div', class_="cb-min-bat-rw")[0].text
+
             try:
-                if 'REQ' in second_batting_team_score:
-                    second_batting_team_score = second_batting_team_score.split("REQ")[0].split('CRR:')[0]
+
+                if 'CRR' in second_batting_team_score and 'test' in url:
+
+                    second_batting_team_score = soup.find('span', class_="cb-font-20 text-bold").text.strip()
+
                 else:
-                    second_batting_team_score = 'Yet to bat'
+
+                    second_batting_team_score = 'yet to bat'
+
             except:
-                second_batting_team_score=second_batting_team_score
+
+                second_batting_team_score = 'Yet to bat'
+
         except:
-            second_batting_team_score = 'Yet to bat'
+
+            second_batting_team_score = 'yet to bat'
+ 
 
     # IMPROVED MATCH STATUS (From Code 2)
     try:
-        match_status = soup.find('div', class_="cb-col cb-col-100 cb-min-stts cb-text-complete").text.strip()
+        match_status = (soup.find('div', class_="cb-col cb-col-100 cb-min-stts cb-text-complete") or soup.find('div',class_="cb-text-inprogress")).text.strip()
     except:
         match_status = "Match in progress"
     try:
@@ -265,4 +281,5 @@ def cricbuzz_api():
 if __name__ == '__main__':
 
     app.run(debug=True)
+
 
