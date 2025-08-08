@@ -57,7 +57,7 @@ def get_live_match_data(match_id, slug):
             # second_batting_team_score = soup.find('span', class_="cb-font-20 text-bold").text.strip()
             second_batting_team_score = soup.find_all('div', class_="cb-min-bat-rw")[0].text
             if 'CRR' in second_batting_team_score and 'REQ' in second_batting_team_score :
-                second_batting_team_score = second_batting_team_score
+                second_batting_team_score = second_batting_team_score.split('CRR')[0] 
                 # print('jjjjjjjjjjjjjjjj',second_batting_team_score)
             else:
                 try:
@@ -271,6 +271,7 @@ def cricbuzz_api():
 if __name__ == '__main__':
 
     app.run(debug=True)
+
 
 
 
